@@ -3,17 +3,22 @@ package com.ho.jvolt.common.security.auth;
 import com.ho.jvolt.common.security.auth.request.AuthenticationRequest;
 import com.ho.jvolt.common.security.auth.request.RegisterRequest;
 import com.ho.jvolt.common.security.auth.response.AuthenticationResponse;
+import com.ho.jvolt.common.security.auth.response.RegisterResponse;
 import com.ho.jvolt.common.security.config.JwtService;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshToken;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshTokenService;
 import com.ho.jvolt.user.Role;
 import com.ho.jvolt.user.User;
 import com.ho.jvolt.user.UserRepository;
+import com.ho.jvolt.user.mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +30,14 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthenticationResponse register(RegisterRequest request){
+    @Transactional
+    public RegisterResponse register(RegisterRequest request) throws Exception {
+
+        Optional<User> userYN = userRepository.findByEmail(request.getEmail());
+        if(userYN.isPresent()){
+            throw new Exception("User with email "+request.getEmail() + " already exists.");
+        }
+
         User user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -34,12 +46,15 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+
+        RegisterResponse registerResponse = UserMapper.INSTANCE.userToRegisterResponse(user);
+        registerResponse.setSuccess(true);
+        registerResponse.setMessage("회원가입이 성공적으로 완료되었습니다.");
+
+        return registerResponse;
     }
 
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

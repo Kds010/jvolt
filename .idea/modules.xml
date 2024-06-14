@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/jvolt.iml" filepath="$PROJECT_DIR$/.idea/jvolt.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jvolt.jvolt.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/jvolt.jvolt.main~1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jvolt.jvolt.main.iml" filepath="$PROJECT_DIR$/.idea/modules/jvolt.jvolt.main.iml" />
     </modules>
   </component>
 </project>
