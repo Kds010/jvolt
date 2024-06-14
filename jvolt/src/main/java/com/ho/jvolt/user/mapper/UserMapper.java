@@ -12,9 +12,7 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "success", ignore = true) // Custom fields
-    @Mapping(target = "message", ignore = true) // Custom fields
-    RegisterResponse userToRegisterResponse(User user);
+    RegisterResponse userToRegisterResponse(User user, boolean success, String message);
 
     @AfterMapping
     default void addCustomFields(@MappingTarget RegisterResponse registerResponse) {

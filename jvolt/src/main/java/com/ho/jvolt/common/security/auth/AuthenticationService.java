@@ -47,11 +47,7 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
 
-        RegisterResponse registerResponse = UserMapper.INSTANCE.userToRegisterResponse(user);
-        registerResponse.setSuccess(true);
-        registerResponse.setMessage("회원가입이 성공적으로 완료되었습니다.");
-
-        return registerResponse;
+        return UserMapper.INSTANCE.userToRegisterResponse(user, true, "회원가입이 성공적으로 완료되었습니다.");
     }
 
     @Transactional
