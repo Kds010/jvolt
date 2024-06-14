@@ -3,6 +3,7 @@ package com.ho.jvolt.common.security.auth;
 import com.ho.jvolt.common.security.auth.request.AuthenticationRequest;
 import com.ho.jvolt.common.security.auth.request.RegisterRequest;
 import com.ho.jvolt.common.security.auth.response.AuthenticationResponse;
+import com.ho.jvolt.common.security.auth.response.RegisterResponse;
 import com.ho.jvolt.common.security.config.JwtService;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshToken;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshTokenService;
@@ -27,9 +28,9 @@ public class AuthenticationController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<RegisterResponse> register(
             @RequestBody RegisterRequest request
-    ) {
+    ) throws Exception {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
