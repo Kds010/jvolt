@@ -1,6 +1,7 @@
 package com.ho.jvolt.common.security.auth;
 
 import com.ho.jvolt.common.security.auth.request.AuthenticationRequest;
+import com.ho.jvolt.common.security.auth.request.PasswordResetReqeust;
 import com.ho.jvolt.common.security.auth.request.RegisterRequest;
 import com.ho.jvolt.common.security.auth.response.AuthenticationResponse;
 import com.ho.jvolt.common.security.auth.response.RegisterResponse;
@@ -8,13 +9,11 @@ import com.ho.jvolt.common.security.config.JwtService;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshToken;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshTokenService;
 import com.ho.jvolt.common.security.token.refreshToken.request.RefreshTokenRequest;
+import com.ho.jvolt.common.smtp.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -26,6 +25,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
+    private final MailService mailService;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(
@@ -59,5 +59,13 @@ public class AuthenticationController {
                 .build();
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/passwordReset")
+    public ResponseEntity<String> passwordReset(
+            @RequestBody PasswordResetReqeust passwordResetReqeust
+            ) {
+        mailService.sendSimpleMail(passwordResetReqeust.getEmail());
+        return ResponseEntity.ok("success");
     }
 }

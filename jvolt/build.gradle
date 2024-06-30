@@ -32,11 +32,15 @@ dependencies {
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
 	annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
 
+	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5' // 취약점이 존재하며 CVE 에 등록되어있으며 0.12.5 버전까지 노출상태.
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	//SMTP
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'org.postgresql:postgresql'
