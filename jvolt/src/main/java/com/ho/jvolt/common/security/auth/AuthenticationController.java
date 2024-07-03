@@ -10,7 +10,9 @@ import com.ho.jvolt.common.security.token.refreshToken.RefreshToken;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshTokenService;
 import com.ho.jvolt.common.security.token.refreshToken.request.RefreshTokenRequest;
 import com.ho.jvolt.common.smtp.MailService;
+import com.ho.jvolt.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ public class AuthenticationController {
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final MailService mailService;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(
@@ -61,11 +64,26 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/passwordReset")
-    public ResponseEntity<String> passwordReset(
+    @PostMapping("/verifyPasswordReset")
+    public ResponseEntity verifyPasswordReset(
             @RequestBody PasswordResetReqeust passwordResetReqeust
             ) {
-        mailService.sendSimpleMail(passwordResetReqeust.getEmail());
-        return ResponseEntity.ok("success");
+//        mailService.sendSimpleMail(passwordResetReqeust.getEmail(), );
+        userService.sendCodeToEmail(passwordResetReqeust.getEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/verifyPasswordResetConfirm")
+    public ResponseEntity verifyPasswordResetConfirm(
+            @RequestParam("email") String email,
+            @RequestParam("code") String authCode
+    ) {
+        Boolean response = userService.verifiedCode(email, authCode);
+        if(response){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+//        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

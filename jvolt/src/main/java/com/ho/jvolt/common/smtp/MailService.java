@@ -17,14 +17,15 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
-    public void sendSimpleMail(String emailAddress) {
+    public void sendSimpleMail(String emailAddress, String title, String body) {
         // SimpleMailMessage 단순 텍스트 기반 이메일 용.
         // MailMessage 복잡한 이메일 메시지 용. 첨부 파일, 이미지 삽입 등.
 
         SimpleMailMessage smsg = new SimpleMailMessage();
         smsg.setTo(emailAddress);
-        smsg.setSubject("테스트 이메일");
-        smsg.setText("비밀번호 리셋 테스트");
+        smsg.setSubject(title);
+
+        smsg.setText(body);
 
         try {
             this.mailSender.send(smsg);

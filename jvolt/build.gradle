@@ -27,7 +27,7 @@ dependencies {
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
 	annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
@@ -41,6 +41,9 @@ dependencies {
 
 	//SMTP
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'org.postgresql:postgresql'
