@@ -1,9 +1,7 @@
-package com.ho.jvolt.common.security.auth;
+package com.ho.jvolt.auth;
 
-import com.ho.jvolt.common.security.auth.request.AuthenticationRequest;
-import com.ho.jvolt.common.security.auth.request.RegisterRequest;
-import com.ho.jvolt.common.security.auth.response.AuthenticationResponse;
-import com.ho.jvolt.common.security.auth.response.RegisterResponse;
+import com.ho.jvolt.auth.dto.AuthenticationDto;
+import com.ho.jvolt.auth.dto.RegisterDto;
 import com.ho.jvolt.common.security.config.JwtService;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshToken;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshTokenService;
@@ -31,7 +29,7 @@ public class AuthenticationService {
     private final RefreshTokenService refreshTokenService;
 
     @Transactional
-    public RegisterResponse register(RegisterRequest request) throws Exception {
+    public RegisterDto.Response register(RegisterDto.Request request) throws Exception {
 
         Optional<User> userYN = userRepository.findByEmail(request.getEmail());
         if(userYN.isPresent()){
@@ -51,7 +49,7 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public AuthenticationResponse authenticate(AuthenticationRequest request){
+    public AuthenticationDto.Response authenticate(AuthenticationDto.Request request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -62,7 +60,7 @@ public class AuthenticationService {
                 .orElseThrow();
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(request.getEmail());
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return AuthenticationDto.Response.builder()
                 .refreshToken(refreshToken.getToken())
                 .token(jwtToken)
                 .build();

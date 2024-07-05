@@ -1,14 +1,12 @@
-package com.ho.jvolt.common.security.auth;
+package com.ho.jvolt.auth;
 
-import com.ho.jvolt.common.security.auth.request.AuthenticationRequest;
-import com.ho.jvolt.common.security.auth.request.PasswordResetReqeust;
-import com.ho.jvolt.common.security.auth.request.RegisterRequest;
-import com.ho.jvolt.common.security.auth.response.AuthenticationResponse;
-import com.ho.jvolt.common.security.auth.response.RegisterResponse;
+import com.ho.jvolt.auth.dto.AuthenticationDto;
+import com.ho.jvolt.auth.dto.PasswordResetDto;
+import com.ho.jvolt.auth.dto.RegisterDto;
 import com.ho.jvolt.common.security.config.JwtService;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshToken;
 import com.ho.jvolt.common.security.token.refreshToken.RefreshTokenService;
-import com.ho.jvolt.common.security.token.refreshToken.request.RefreshTokenRequest;
+import com.ho.jvolt.common.security.token.refreshToken.dto.RefreshTokenDto;
 import com.ho.jvolt.common.smtp.MailService;
 import com.ho.jvolt.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,21 +29,21 @@ public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(
-            @RequestBody RegisterRequest request
+    public ResponseEntity<RegisterDto.Response> register(
+            @RequestBody RegisterDto.Request request
     ) throws Exception {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody AuthenticationRequest request
+    public ResponseEntity<AuthenticationDto.Response> register(
+            @RequestBody AuthenticationDto.Request request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
     @PostMapping("/refreshToken")
-    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest){
+    public ResponseEntity<AuthenticationDto.Response> refreshToken(@RequestBody RefreshTokenDto.Request refreshTokenRequest){
         Optional<RefreshToken> optionalRefreshToken = refreshTokenService.findByToken(refreshTokenRequest.getToken());
         if (optionalRefreshToken.isEmpty()) {
             throw new RuntimeException("Refresh Token is not in DB");
@@ -56,7 +54,7 @@ public class AuthenticationController {
         UserDetails userDetails = refreshToken.getUser();
 
         String newToken = jwtService.generateToken(userDetails);
-        AuthenticationResponse response = AuthenticationResponse.builder()
+        AuthenticationDto.Response response = AuthenticationDto.Response.builder()
                 .token(newToken)
                 .refreshToken(refreshTokenRequest.getToken())
                 .build();
@@ -66,7 +64,7 @@ public class AuthenticationController {
 
     @PostMapping("/verifyPasswordReset")
     public ResponseEntity verifyPasswordReset(
-            @RequestBody PasswordResetReqeust passwordResetReqeust
+            @RequestBody PasswordResetDto.Request passwordResetReqeust
             ) {
 //        mailService.sendSimpleMail(passwordResetReqeust.getEmail(), );
         userService.sendCodeToEmail(passwordResetReqeust.getEmail());
