@@ -1,7 +1,6 @@
 package com.ho.jvolt.redis;
 
 import com.ho.jvolt.common.redis.RedisService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,6 @@ import java.time.Duration;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
-@Slf4j
 @SpringBootTest
 class RedisCrudTest {
     final String KEY = "key";
