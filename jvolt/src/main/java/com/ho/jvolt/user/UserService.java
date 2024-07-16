@@ -1,11 +1,9 @@
 package com.ho.jvolt.user;
 
-import com.ho.jvolt.common.config.RestClientConfig;
 import com.ho.jvolt.common.redis.RedisService;
 import com.ho.jvolt.common.smtp.MailService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +14,11 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.Random;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
-
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private static final String AUTH_CODE_PREFIX = "AuthCode ";
     private final UserRepository userRepository;
@@ -44,7 +41,7 @@ public class UserService {
     private void checkDuplicatedEmail(String email) {
         Optional<User> member = userRepository.findByEmail(email);
         if (member.isPresent()) {
-            logger.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", email);
+            log.debug("MemberServiceImpl.checkDuplicatedEmail exception occur email: {}", email);
             throw new RuntimeException();
         }
     }
@@ -59,7 +56,7 @@ public class UserService {
             }
             return builder.toString();
         } catch (NoSuchAlgorithmException e) {
-            logger.debug("MemberService.createCode() exception occur");
+            log.debug("MemberService.createCode() exception occur");
             throw new RuntimeException();
         }
     }

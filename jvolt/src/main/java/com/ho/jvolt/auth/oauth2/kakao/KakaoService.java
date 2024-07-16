@@ -11,11 +11,10 @@ public class KakaoService {
 
     private final KakaoApiComponent kakaoApiComponent;
 
-    // 인가 코드 받는 용도
-    public String getAuthorizeCode(){
+    public String getAccessToken(String code){
         String authorizeCode = "";
         try{
-            authorizeCode = kakaoApiComponent.KakaoAuthCode();
+            authorizeCode = kakaoApiComponent.KakaoAccessToken(code);
         }catch (Exception e){
             e.printStackTrace();
         }
