@@ -28,7 +28,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/home", "/home/**").permitAll()
-                                .requestMatchers("/api/v1/login/oauth/code/kakao").permitAll()
+                                .requestMatchers("/api/v1/login/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->

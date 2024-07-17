@@ -1,14 +1,17 @@
 package com.ho.jvolt.common.smtp;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.MailSender;
 
-@Slf4j
 @Service
 public class MailService {
+
+    private final Logger logger = LoggerFactory.getLogger(MailService.class);
 
     private final MailSender mailSender;
 
@@ -28,7 +31,7 @@ public class MailService {
 
         try {
             this.mailSender.send(smsg);
-            log.info("간편 임시 이메일 전송");
+            logger.info("간편 임시 이메일 전송");
         }catch (MailException e){
             throw e;
         }
